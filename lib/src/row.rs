@@ -200,6 +200,34 @@ impl UnboundedRelation {
     }
 }
 
+pub trait ValueGetter {
+    fn get<T: std::convert::TryFrom<BoltType>>(&self, key: &str) -> Option<T>;
+}
+
+impl ValueGetter for Row {
+    fn get<T: std::convert::TryFrom<BoltType>>(&self, key: &str) -> Option<T> {
+        self.attributes.get(key)
+    }
+}
+
+impl ValueGetter for Node {
+    fn get<T: std::convert::TryFrom<BoltType>>(&self, key: &str) -> Option<T> {
+        self.inner.get(key)
+    }
+}
+
+impl ValueGetter for Relation {
+    fn get<T: std::convert::TryFrom<BoltType>>(&self, key: &str) -> Option<T> {
+        self.inner.get(key)
+    }
+}
+
+impl ValueGetter for UnboundedRelation {
+    fn get<T: std::convert::TryFrom<BoltType>>(&self, key: &str) -> Option<T> {
+        self.inner.get(key)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use serde::Deserialize;
