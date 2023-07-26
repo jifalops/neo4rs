@@ -1,6 +1,6 @@
 use crate::errors::Error;
 use crate::types::*;
-use chrono::{DateTime, FixedOffset, NaiveDateTime, Offset, Timelike};
+use chrono::{DateTime, FixedOffset, NaiveDateTime, Offset, Timelike, Utc};
 use neo4rs_macros::BoltStruct;
 use std::convert::TryInto;
 
@@ -95,6 +95,12 @@ impl TryInto<DateTime<FixedOffset>> for BoltDateTime {
             .ok_or(Error::ConversionError)?;
 
         Ok(DateTime::from_utc(datetime, offset))
+    }
+}
+
+impl From<DateTime<Utc>> for BoltDateTime {
+    fn from(value: DateTime<Utc>) -> Self {
+        BoltDateTime::from(value.fixed_offset())
     }
 }
 
